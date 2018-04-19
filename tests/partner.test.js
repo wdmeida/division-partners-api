@@ -14,4 +14,53 @@ describe('Partner feature', () => {
     expect(partner.name).toBe(template.name);
     expect(partner.percent).toBe(template.percent);
   });
+
+  const testWithoutProperty = async (property, propertyName) => {
+    const partner = { ...template };
+    delete partner[property];
+    const { text, statusCode } = await request(app).post(feature).send(partner);
+    const { error } = JSON.parse(text);
+
+    expect(statusCode).toBe(400);
+    expect(error).toContain(propertyName);
+    expect(error).toContain('obrigatório');
+  };
+
+  test('Parnets name is required', async () => {
+    await testWithoutProperty('name', 'nome');
+  });
+
+  test('Parners percent is required', async () => {
+    await testWithoutProperty('percent', 'percentual');
+  });
+
+  const testBetweenPercentInvalid = async (percent) => {
+    const partner = { ...template, percent };
+    const { text, statusCode } = await request(app).post(feature).send(partner);
+    const { error } = JSON.parse(text);
+
+    expect(statusCode).toBe(400);
+    expect(error).toContain('percentual');
+    expect(error).toContain('1 e 100');
+  };
+
+  test('Percent should be is > 0', async () => {
+    await testBetweenPercentInvalid(0);
+    await testBetweenPercentInvalid(-1);
+  });
+
+  test('Percent shoul be is <= 100', async () => {
+    await testBetweenPercentInvalid(101);
+  });
+
+  test('Sum of percents should be <= 100', async () => {
+    const newPartner = { ...template, percent: 51 };
+
+    const { text, statusCode } = await request(app).post(feature).send(newPartner);
+    const { error } = JSON.parse(text);
+
+    expect(statusCode).toBe(400);
+    expect(error).toContain('total');
+    expect(error).toContain('excedido');
+  });
 });
