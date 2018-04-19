@@ -1,0 +1,31 @@
+{
+  "name": "division-profits-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "api:dev": "nodemon source/index.js",
+    "api:start": "node source/index.js",
+    "api:test": "jest",
+    "api:lint": "./node_modules/.bin/eslint /source/**/*.js"
+  },
+  "keywords": [],
+  "author": "Wagner Almeida <wdmeida@gmail.com> (https://www.github.com/wdmeida)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "jest": "^22.4.3",
+    "nodemon": "^1.17.3",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.15"
+  }
+}
